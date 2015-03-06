@@ -30,3 +30,6 @@ in certain time zone:-
 ```
 @alpha time now in Tokyo.
 ```
+
+[Slash]:https://api.slack.com/slash-commands
+[bot]:https://api.slack.com/bot-users
