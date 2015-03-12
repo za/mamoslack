@@ -4,7 +4,7 @@ or behave like a [bot].
 
 # Slash command
 It should support a variety of command but for now we'll implement a command
-to search Google Sites for certain keywords. Example:-
+to search private Google Sites for certain keywords. Example:-
 
 ```
 /alpha search ezsms faq
