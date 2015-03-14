@@ -35,8 +35,24 @@ def stringQuery(text):
         return_string += words[0]
         return return_string
     else:
-        for x in range(0, len(words)-1):
+        for x in range(0, len(words)):
             return_string += words[x]
             if x != len(words)-1:
                 return_string += '+'
         return return_string
+    
+def returnPayload(search_result):
+    "To process and return payload to Slack"
+    payload_string = {} 
+    payload_string['searchResult'] = []
+    r = search_result.json()
+    totalResults = int(r['searchInformation']['formattedTotalResults'])
+    payload_string['totalResults'] = totalResults
+
+    for x in range(0, totalResults):
+        tempData = {}
+        tempData['formattedUrl'] = r['items'][x]['formattedUrl']
+        tempData['htmlSnippet'] = r['items'][x]['htmlSnippet']
+        payload_string['searchResult'].append(tempData)
+
+    return payload_string
