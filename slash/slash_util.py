@@ -37,22 +37,35 @@ def stringQuery(text):
     else:
         for x in range(0, len(words)):
             return_string += words[x]
-            if x != len(words)-1:
+            if x != len(words)-1 and x != 0:
                 return_string += '+'
         return return_string
     
+def getCorrectUrl(list_of_url):
+    "To find the correct url and return it"
+    url_total = len(list_of_url)
+    for x in range (0, url_total):
+        if list_of_url[x]['rel'] == 'alternate' and list_of_url[x]['type'] == 'text/html':
+            return list_of_url[x]['href']
+
 def returnPayload(search_result):
     "To process and return payload to Slack"
     payload_string = {} 
     payload_string['searchResult'] = []
     r = search_result.json()
-    totalResults = int(r['searchInformation']['formattedTotalResults'])
-    payload_string['totalResults'] = totalResults
+    totalResults = len(r['feed']['entry']) 
+    payload_string['totalResults'] = 0 
 
     for x in range(0, totalResults):
         tempData = {}
-        tempData['formattedUrl'] = r['items'][x]['formattedUrl']
-        tempData['htmlSnippet'] = r['items'][x]['htmlSnippet']
-        payload_string['searchResult'].append(tempData)
+        tempData['title'] = r['feed']['entry'][x]['title']['$t']
+
+        if tempData['title'] == '':
+            continue
+        else:
+            tempData['url'] = getCorrectUrl(r['feed']['entry'][x]['link'])
+            #tempData['url'] = r['feed']['entry'][x]['link'][0]['href']
+            payload_string['searchResult'].append(tempData)
+            payload_string['totalResults'] += 1
 
     return payload_string
